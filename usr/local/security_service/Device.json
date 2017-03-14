@@ -1,0 +1,9 @@
+{"Device": [
+{"device_id":"5149013115785703","type_id":"d05","connection_status":"0","signal_power_status":"20","temperature_status":"10","power_status":"70","connection_way":""}, 
+{"device_id":"5149013103542656","type_id":"d02","connection_status":"1","signal_power_status":"30","temperature_status":"15","power_status":"80","connection_way":""}, 
+{"device_id":"5149013103542561","type_id":"d02","connection_status":"0","signal_power_status":"40","temperature_status":"20","power_status":"90","connection_way":""}, 
+{"device_id":"5149013103542532","type_id":"d06","connection_status":"1","signal_power_status":"60","temperature_status":"30","power_status":"60","connection_way":""}, 
+{"device_id":"5149013103542545","type_id":"d04","connection_status":"0","signal_power_status":"50","temperature_status":"25","power_status":"100","connection_way":""},
+{"device_id":"5149013103542553","type_id":"d03","connection_status":"0","signal_power_status":"50","temperature_status":"25","power_status":"100","connection_way":""}
+
+]}

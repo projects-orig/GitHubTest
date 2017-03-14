@@ -1,0 +1,16 @@
+{
+  "cusno":"003301",  
+  "ver":"20161206111307103",
+  "data": {
+    "API": "http://211.22.242.13:8164/api/Security/Actionconfirm",
+    "CheckDelayTime":"30",
+    "StdDelayTime":"60",
+    "HostState": "0",
+    "CusState": "01" 
+  } 
+}
+
+
+
+    
+    

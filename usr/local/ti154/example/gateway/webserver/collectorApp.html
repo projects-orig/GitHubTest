@@ -1,0 +1,746 @@
+<!DOCTYPE html>
+<html lang="en">
+    <!--
+     /******************************************************************************
+     
+     @file collectorApp.html
+     
+     @brief front end file
+     
+     Group: WCS LPC
+     $Target Devices: Linux: AM335x, Embedded Devices: CC1310, CC1350$
+     
+     ******************************************************************************
+     $License: BSD3 2016 $
+     
+     Copyright (c) 2015, Texas Instruments Incorporated
+     All rights reserved.
+     
+     Redistribution and use in source and binary forms, with or without
+     modification, are permitted provided that the following conditions
+     are met:
+     
+     *  Redistributions of source code must retain the above copyright
+     notice, this list of conditions and the following disclaimer.
+     
+     *  Redistributions in binary form must reproduce the above copyright
+     notice, this list of conditions and the following disclaimer in the
+     documentation and/or other materials provided with the distribution.
+     
+     *  Neither the name of Texas Instruments Incorporated nor the names of
+     its contributors may be used to endorse or promote products derived
+     from this software without specific prior written permission.
+     
+     THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+     AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO,
+     THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR
+     PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR
+     CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL,
+     EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO,
+     PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS;
+     OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY,
+     WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR
+     OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE,
+     EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+     ******************************************************************************
+     $Release Name: TI-15.4Stack Linux x64 SDK$
+     $Release Date: July 14, 2016 (2.00.00.30)$
+     *****************************************************************************/
+     -->
+    <head>
+        <meta charset="utf-8">
+            <meta http-equiv="X-UA-Compatible" content="IE=edge">
+                <meta name="viewport" content="width=device-width, initial-scale=1">
+                    <!-- The above 3 meta tags *must* come first in the head; any other
+                     head content must come *after* these tags -->
+                    <meta name="description" content="">
+                        <meta name="author" content="Suyash Jain">
+                            
+                            <!--     <title>TIMAC CollectorApp</title> -->
+                            <title>TI-15.4 Collector</title>
+                            <!-- Bootstrap core CSS -->
+                            <link href="dist/css/bootstrap.min.css" rel="stylesheet">
+                                
+                                <style>
+                                    /* Sets the device information block to scroll after
+                                     set height */
+                                #ConnectedDeviceWrapper {
+                                    max-height: 400px;
+                                    overflow-y: auto;
+                                }
+                                /* set alignment for table elements */
+                                .table > tbody > tr > td {
+                                    vertical-align: middle;
+                                }
+                                </style>
+    </head>
+    
+    <body>
+        <nav class="navbar navbar-inverse navbar-fixed-top">
+            <div class="navbar-header">
+                <!--             <a class="navbar-brand" href="#">TI-15.4 Stack-2.0.0 Collector App</a> -->
+                <a class="navbar-brand" href="#">TI-15.4 Collector App</a>
+            </div>
+        </nav>
+        
+        <!-- Main jumbotron -->
+        <div class="jumbotron">
+            <div class="container">
+                <!-- <h4>TI-15.4 Collector</h4> -->
+            </div>
+        </div>
+        
+        
+        <div class="container">
+            <!--main data -->
+            <div class="row">
+                <div class="col-md-3">
+                    <div id="networkInformationWrapper">
+                        <div class="panel-group">
+                            <div class="panel panel-default">
+                                <div class="panel-heading">
+                                    <h4><b>Network Information</b></h4></div>
+                                <table class="table table-hover table-responsive nwkInformationTable">
+                                    <tr>
+                                        <td>PanID</td>
+                                        <td><span id="panid"></span></td>
+                                    </tr>
+                                    <tr>
+                                        <td>Coord Addr</td>
+                                        <td><span id="coordAddr"></span></td>
+                                    </tr>
+                                    <tr>
+                                        <td>Network Mode</td>
+                                        <td><span id="networkmode"></span></td>
+                                    </tr>
+                                    <tr>
+                                        <td>Security</td>
+                                        <td><span id="security"></span></td>
+                                    </tr>
+                                    <tr class="networkstate">
+                                        <td id="nwkStateText">
+                                            Network close for New Devices
+                                        </td>
+                                        <td>
+                                            <button type=button class=btn btn-default id="allowJoin">open</button>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>Info log</td>
+                                        <td><button type=button class=btn btn-default id="info_log_btn">close</button></td>
+                                    </tr>
+                                    <tr>
+                                        <td>EVE003 log</td>
+                                        <td><button type=button class=btn btn-default id="eve003_log_btn">close</button></td>
+                                    </tr>
+                                    <tr>
+                                        <td>EVE004 log</td>
+                                        <td><button type=button class=btn btn-default id="eve004_log_btn">close</button></td>
+                                    </tr>
+                                    <tr>
+                                        <td>EVE005 log</td>
+                                        <td><button type=button class=btn btn-default id="eve005_log_btn">close</button></td>
+                                    </tr>
+                                    <tr>
+                                        <td>EVE006 log</td>
+                                        <td><button type=button class=btn btn-default id="eve006_log_btn">close</button></td>
+                                    </tr>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div>
+                        <div class="panel-group">
+                            <div class="panel panel-default">
+                                <div id="networkConvasPanel" class="panel-heading">
+                                    <h4><b>Network</b></h4></div>
+                                <canvas id="networkCanvas" class="canvas"></canvas>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <style>
+                    .divRight {
+                        float: right;
+                        right: 50px;
+                    }
+                    .divLeft {
+                        float: left;
+                        left: 50px;
+                    }
+                </style>
+
+                <div class="col-md-9">
+                    <div class="panel-group">
+                        <div class="panel panel-default">
+                            <div class="panel-heading">
+                                <h4><b>Function</b></h4>
+                            </div>
+
+                            <!-- <table class="table table-hover table-responsive">
+                                <tr>
+                                    <th><div class="divLeft">Name</div></th>
+                                    <th><div class="divRight">Function</div></th>
+                                </tr>
+                            </table> -->
+                            <div id="functionWrapper">
+                                <table id="functionTable" class="table table-hover table-responsive ">
+                                    <tr>
+                                        <td>
+                                            <div class="divLeft">Antenna</div>
+                                        </td>
+                                        <td>
+                                            <div class="divRight">
+                                                <button type=button class=btn btn-default id="antenna_btn">internal</button>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            <div class="divLeft">Reset to default</div>
+                                        </td>
+                                        <td>
+                                            <div class="divRight">
+                                                <button type=button class=btn btn-default id="reset_btn">reset</button>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Device List Information Box -->
+                    <div class="panel-group">
+                        <div class="panel panel-default">
+                            <div class="panel-heading">
+                                <h4><b>Sensor Nodes</b></h4></div>
+                            <table class="table table-hover table-responsive">
+                                <tr>
+                                    <th>Short Address</th>
+                                    <th>Ext Address</th>
+                                    <th>Raw Data</th>
+                                    <th>RSSI</th>
+                                    <th>Button</th>
+                                </tr>
+                            </table>
+                            <div id="ConnectedDeviceWrapper">
+                                <table id="deviceTable" class="table table-hover table-responsive ">
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <footer>
+                <p>&copy; 2016-17 Texas Instruments Incorporated.</p>
+            </footer>
+        </div>
+        <!-- /container -->
+        <!-- Bootstrap core JavaScript
+         ================================================== -->
+        <!-- Placed at the end of the document so the pages load faster -->
+        <script src="/dist/jquery/jquery-1.12.0.min.js"></script>
+        <script>
+            window.jQuery || document.write('<script src="../../assets/js/vendor/jquery.min.js"><\/script>')
+            </script>
+        <script src="dist/js/bootstrap.min.js"></script>
+        <script src="/socket.io/socket.io.js"></script>
+        <script>
+            $(function(){
+
+                var socket = io.connect();
+                /* Device table */
+                var $deviceTable = $('#deviceTable');
+                
+                /* Network Information Block */
+                var $panid = $('#panid');
+                var $coordAddr = $('#coordAddr');
+                var $security = $('#security');
+                var $networkmode = $('#networkmode');
+              
+                /* connected device information */
+                var connectedDeviceArray;
+                var devArrayRequested = 0;
+
+                /* Request device list and newtork information on successful connection */
+                socket.on('connect', function () {
+                    /* Request device array */
+                    if (devArrayRequested === 0) {
+                        socket.emit('getDevArrayReq');
+                        devArrayRequested = 1;
+                    }
+                });
+              
+                /* Handling Newtork open close button */
+                var $allowJoin = $('#allowJoin');
+                var buttonTimer;
+
+                var $antenna_btn = $('#antenna_btn');
+                var $reset_btn = $('#reset_btn');
+
+                var $info_log_btn = $('#info_log_btn');
+                var $eve003_log_btn = $('#eve003_log_btn');
+                var $eve004_log_btn = $('#eve004_log_btn');
+                var $eve005_log_btn = $('#eve005_log_btn');
+                var $eve006_log_btn = $('#eve006_log_btn');
+                var infoLogTimer, eve003LogTimer, eve004LogTimer, eve005LogTimer, eve006LogTimer;
+              
+                /* Initialize network state button */
+                $('.networkstate').hide();
+              
+                /* callback function */
+                function collectorApp_permitJoinButtonCb() {
+                    /* did not recieve a confirm to the request */
+                    clearInterval(buttonTimer);
+              
+                    if ($allowJoin.html() == "opening..") {
+                        /* need to retry */
+                        $allowJoin.html("open");
+                    } else if ($allowJoin.html() == "closing..") {
+                        /* need to retry */
+                        $allowJoin.html("close");
+                    }
+                }
+              
+                /* Handle button press */
+                $allowJoin.click(function () {
+                    if ($allowJoin.text() == "open") {
+                        /* network is open - lets close */
+                        // { action: "open" }
+                        socket.emit('setJoinPermit', { open: true, duration: 1 * 60});
+                        $allowJoin.html("opening..");
+                        buttonTimer = setInterval(collectorApp_permitJoinButtonCb, 2000);
+                    } else {
+                        /* network is closed - lets open */
+                        // { action: "close" }
+                        socket.emit('setJoinPermit', { open: false, duration: 0});
+                        $allowJoin.html("closing..");
+                        buttonTimer = setInterval(collectorApp_permitJoinButtonCb, 2000);
+                    }
+                });
+
+                function collectorApp_infoLogButtonCb() {
+                    clearInterval(infoLogTimer);
+              
+                    if ($info_log_btn.html() == "opening..") {
+                        $info_log_btn.html("open");
+                    } else if ($info_log_btn.html() == "closing..") {
+                        $info_log_btn.html("close");
+                    }
+                }
+
+                $info_log_btn.click(function () {
+                    if ($info_log_btn.text() == "close") {
+                        socket.emit('setInfoLog', {open: true});
+                        $info_log_btn.html("opening..");
+                        infoLogTimer = setInterval(collectorApp_infoLogButtonCb, 2000);
+                    } else {
+                        socket.emit('setInfoLog', {open: false});
+                        $info_log_btn.html("closing..");
+                        infoLogTimer = setInterval(collectorApp_infoLogButtonCb, 2000);
+                    }
+                });
+
+                function collectorApp_eve003ButtonCb() {
+                    clearInterval(eve003LogTimer);
+              
+                    if ($eve003_log_btn.html() == "opening..") {
+                        $eve003_log_btn.html("open");
+                    } else if ($eve003_log_btn.html() == "closing..") {
+                        $eve003_log_btn.html("close");
+                    }
+                }
+
+                $eve003_log_btn.click(function () {
+                    if ($eve003_log_btn.text() == "close") {
+                        socket.emit('setEve003Log', {open: true});
+                        $eve003_log_btn.html("opening..");
+                        eve003LogTimer = setInterval(collectorApp_eve003ButtonCb, 2000);
+                    } else {
+                        socket.emit('setEve003Log', {open: false});
+                        $eve003_log_btn.html("closing..");
+                        eve003LogTimer = setInterval(collectorApp_eve003ButtonCb, 2000);
+                    }
+                });
+
+                function collectorApp_eve004ButtonCb() {
+                    clearInterval(eve004LogTimer);
+              
+                    if ($eve004_log_btn.html() == "opening..") {
+                        $eve004_log_btn.html("open");
+                    } else if ($eve004_log_btn.html() == "closing..") {
+                        $eve004_log_btn.html("close");
+                    }
+                }
+
+                $eve004_log_btn.click(function () {
+                    if ($eve004_log_btn.text() == "close") {
+                        socket.emit('setEve004Log', { open: true});
+                        $eve004_log_btn.html("opening..");
+                        eve004LogTimer = setInterval(collectorApp_eve004ButtonCb, 2000);
+                    } else {
+                        socket.emit('setEve004Log', { open: false});
+                        $eve004_log_btn.html("closing..");
+                        eve004LogTimer = setInterval(collectorApp_eve004ButtonCb, 2000);
+                    }
+                });
+
+                function collectorApp_eve005ButtonCb() {
+                    clearInterval(eve005LogTimer);
+              
+                    if ($eve005_log_btn.html() == "opening..") {
+                        $eve005_log_btn.html("open");
+                    } else if ($eve005_log_btn.html() == "closing..") {
+                        $eve005_log_btn.html("close");
+                    }
+                }
+
+                $eve005_log_btn.click(function () {
+                    if ($eve005_log_btn.text() == "close") {
+                        socket.emit('setEve005Log', { open: true});
+                        $eve005_log_btn.html("opening..");
+                        eve005LogTimer = setInterval(collectorApp_eve005ButtonCb, 2000);
+                    } else {
+                        socket.emit('setEve005Log', { open: false});
+                        $eve005_log_btn.html("closing..");
+                        eve005LogTimer = setInterval(collectorApp_eve005ButtonCb, 2000);
+                    }
+                });
+
+                function collectorApp_eve006ButtonCb() {
+                    clearInterval(eve006LogTimer);
+              
+                    if ($eve006_log_btn.html() == "opening..") {
+                        $eve006_log_btn.html("open");
+                    } else if ($eve006_log_btn.html() == "closing..") {
+                        $eve006_log_btn.html("close");
+                    }
+                }
+
+                $eve006_log_btn.click(function () {
+                    if ($eve006_log_btn.text() == "close") {
+                        socket.emit('setEve006Log', { open: true});
+                        $eve006_log_btn.html("opening..");
+                        eve006LogTimer = setInterval(collectorApp_eve006ButtonCb, 2000);
+                    } else {
+                        socket.emit('setEve006Log', { open: false});
+                        $eve006_log_btn.html("closing..");
+                        eve006LogTimer = setInterval(collectorApp_eve006ButtonCb, 2000);
+                    }
+                });
+
+                $antenna_btn.click(function() {
+                    // state : 1 = external , 2 = internal
+                    // socket.emit('setAntennaConfig', {state:1});
+
+                    if ($antenna_btn.text() == "internal") {
+                        $antenna_btn.html("external..");
+                        socket.emit('setAntennaConfig', {state:1});
+                    } else {
+                        $antenna_btn.html("internal..");
+                        socket.emit('setAntennaConfig', {state:2});
+                    }
+                });
+
+                $reset_btn.click(function() {
+                    var r = confirm("Do you want to reset?");
+                    if (r == true) {
+                        socket.emit('clean', {});
+                    } else {
+                        //cancel
+                    }
+                });
+              
+                /*********************************************************************
+                * Plotting functions
+                * *******************************************************************/
+              
+                /* Initialize */
+                var networkCanvas = document.getElementById('networkCanvas');
+                var networkCanvasContext = networkCanvas.getContext('2d');
+              
+                /* After getting the device array response plot the devices */
+                function collectorApp_drawNetwork(devArray) {
+                    var width = networkCanvas.width;
+                    var height = networkCanvas.height;
+              
+                    /* erase the canvas */
+                    networkCanvasContext.clearRect(0, 0, width, height);
+              
+                    /* set canvas x/y to center */
+                    networkCanvasContext.translate(width / 2, height / 2);
+              
+                    /* variables used for plotting*/
+                    var x, y, r, s, angle, i;
+              
+                    /* draw central node -- panCoord
+                      set up pan-coord parameters */
+                    x = 0;
+                    y = 0;
+                    s = 7;
+                    color = "DarkBlue";
+                    /* draw concentrator */
+                    networkCanvasContext.beginPath();
+                    networkCanvasContext.arc(x, y, s, 0, 2 * Math.PI);
+                    networkCanvasContext.fillStyle = color;
+                    networkCanvasContext.fill();
+                    /* select the starting angle for the first node to be 90 */
+                    angle = 90;
+                    /* calculate the difference in angle between two devices */
+                    var diff = 360 / connectedDeviceArray.length;
+                    /* draw nodes */
+                    for (i = 0; i < connectedDeviceArray.length; i++) {
+                        color = "grey";
+                        angle = 90 + (i * diff);
+              
+                        rssi = connectedDeviceArray[i].rssi;
+                        /* set parameters */
+                        /* scale RSSI for short range */
+                        r = ((height - 80) / 2) * (rssi / -128) + (s * 3);
+                        x = r * Math.cos((angle * (Math.PI / 180)));
+                        y = r * Math.sin((angle * (Math.PI / 180)));
+                        s = 7;
+                        /* Draw line to Concentrator (node 0) */
+                        networkCanvasContext.setLineDash([5, 2]);
+                        networkCanvasContext.beginPath();
+                        networkCanvasContext.moveTo(0, 0);
+                        networkCanvasContext.lineTo(x, y);
+                        networkCanvasContext.strokeStyle = 'black';
+                        networkCanvasContext.stroke();
+                        /* render the node */
+                        networkCanvasContext.beginPath();
+                        networkCanvasContext.arc(x, y, s, 0, 2 * Math.PI);
+                        networkCanvasContext.fillStyle = color;
+                        networkCanvasContext.fill();
+                    }
+                    /* set canvas x/y back to 0,0 */
+                    networkCanvasContext.translate(-(width / 2), -(height / 2));
+                }
+              
+              
+                /**********************************************************************
+                Process incoming message from the server
+                ***********************************************************************/
+                function collectorApp_updateNwkInfo(data) {
+                    /* clear the curent table entries */
+                    $deviceTable.empty();
+                    connectedDeviceArray = JSON.parse(data);
+                    var len = connectedDeviceArray.length;
+                    var count;
+              
+                    //window.alert("collectorApp_updateNwkInfo:" + data);
+              
+                    /* Draw Network */
+                    collectorApp_drawNetwork(connectedDeviceArray);
+              
+                    for (count = 0; count < len; count++) {
+                        var devInfo = connectedDeviceArray[count];
+                        var sAddr;
+                        var extAddr = 0;
+                        var capInfo;
+                        var sensorS = "";  //'<table class="table table-hover table-responsive ">';
+                        /* sensor data and rssi is not present when a device
+                          info is recieved just after join */
+                        var sensorDataFound = 0;
+                        var rssi;
+              
+                        if (devInfo.hasOwnProperty('rssi')){
+                            rssi = devInfo.rssi;
+                        } else {
+                            rssi = "--";
+                        }
+              
+                        /* Set the values to update */
+                        if (devInfo.hasOwnProperty('shortAddress')
+                              && devInfo.hasOwnProperty('extAddress')
+                              && devInfo.hasOwnProperty('capabilityInfo')) {
+                            /* short address */
+                            sAddr = devInfo.shortAddress;
+                            /* Extended address */
+                            extAddr = devInfo.extAddress;
+                            /* capability information */
+                            capInfo = devInfo.capabilityInfo;
+                        } else {
+                            console.log("new device message missing required parameters");
+                            continue;
+                        }
+              
+                        //          sensorS += '<tr><td><img src="dist/images/Humidity.png " alt="some_text" height="30" width="30"></td><td>' + devInfo.humiditysensor.humidity + '% RH</td></tr>';
+                        //          sensorS += '<tr><td><img src="dist/images/Temperature.png " alt="some_text" height="30" width="30"></td><td>' + devInfo.temperaturesensor.ambienceTemp + '&deg;C</td></tr>';
+                        //          sensorS += '<tr><td><img src="dist/images/Light.png " alt="some_text" height="30" width="30"></td><td>' + devInfo.lightsensor.rawData + 'lux </td></tr>';
+                        //          sensorS += '</table>';
+              
+                        /* Check supported sensors and get the values */
+                        var ext16 = '0x' + extAddr.toString(16).toUpperCase()
+                        if (devInfo.hasOwnProperty('eve003sensor')) {
+                            sensorS += 'eve003(' + ext16 + ')';
+                            sensorDataFound  = 1;
+                            sensorS += JSON.stringify(devInfo.eve003sensor);
+                        }
+                        if (devInfo.hasOwnProperty('eve004sensor')) {
+                            sensorS += 'eve004(' + ext16 + ')';
+                            sensorDataFound  = 1;
+                            sensorS += JSON.stringify(devInfo.eve004sensor);
+                        }
+                        if (devInfo.hasOwnProperty('eve005sensor')) {
+                            sensorS += 'eve005(' + ext16 + ')';
+                            sensorDataFound  = 1;
+                            sensorS += JSON.stringify(devInfo.eve005sensor);
+                        }
+                        if (devInfo.hasOwnProperty('eve006sensor')) {
+                            sensorS += 'eve006(' + ext16 + ')';
+                            sensorDataFound  = 1;
+                            sensorS += JSON.stringify(devInfo.eve006sensor);
+                        }
+              
+                        if (sensorDataFound == 0) {
+                            sensorS += "--";
+                        }
+              
+                        /* add/update device information */
+                        $deviceTable.prepend('<tr><td>0x' + sAddr.toString(16).toUpperCase() + '</td><td  class="ieee">' + extAddr + '</td><td>' + sensorS + '</td><td>' + rssi + '</td><td>' + "<p button type=button class='test btn btn-default'>Run" + "</p>"+'</td></tr>');
+              
+                        if (devInfo.active == 'true') {
+                            /* active device */
+                        } else {
+                            $('#deviceTable tr:first').fadeTo(1000, 0.4);
+                        }
+                    }
+                }
+              
+                $deviceTable.on("click", "p.test", function() {
+                    //var shortAddr = $(this).closest('tr').find('td:first').text();
+                    // socket.emit('sendToggle', {dstAddr: shortAddr});
+                
+                    //-----------------------------------------------------------------------------------------
+                    var extAddr = $(this).closest('tr').find('td:first').next().text();
+                    // socket.emit('setAlarmConfig', {device_id: extAddr, time: 10});
+                    // socket.emit('setGSensorConfig', {device_id: extAddr, enable: 1, sensitivity: 70});
+                    // socket.emit('setElectricLockConfig', {device_id: extAddr, enable: 1, time: 60});
+                    // socket.emit('setSignalConfig', {device_id: extAddr, mode: 0, value:30 , offset: 10});
+                    // socket.emit('setTempConfig', {device_id: extAddr, value: 50, offset: 10});
+                    // socket.emit('setLowBatteryConfig', {device_id: extAddr, value: 30, offset: 5});
+                    // socket.emit('setDistanceConfig', {device_id: extAddr, mode: 0, distance: 5000});
+                    // socket.emit('setMusicConfig', {device_id: extAddr, mode:2, time:3});
+                    // socket.emit('setMusicConfig', {device_id: extAddr, enable: 1});
+                    // socket.emit('setIntervalConfig', {device_id: extAddr, mode:0, time:5});
+                    // socket.emit('setMotionConfig', {device_id: extAddr, count:10, time:2});
+                    // socket.emit('setResistanceConfig', {device_id: extAddr, value:80});
+                    // socket.emit('setMicrowaveConfig', {device_id: extAddr, enable:1, sensitivity:50});
+                    // socket.emit('setPirConfig', {device_id: extAddr, enable:1});
+                    // socket.emit('setSetUnsetConfig', {device_id: extAddr, state:1});
+                    // socket.emit('sendElectricLockAction', {device_id: extAddr, relay:3});
+                    socket.emit('setInterval', {device_id: extAddr, reporting: 10, polling: 2});
+                    // socket.emit('sendDisconnect', {device_id: extAddr, time:0});
+                    // socket.emit('removeDevice', {device_id: extAddr});
+                });
+                
+                /* Rcvd device array */
+                socket.on('getdevArrayRsp', function (data) {
+                    /* Check if the devices are connected */
+                    if(data) {
+                        /*update device information */
+                        collectorApp_updateNwkInfo(data);
+                    }
+                    /* Request network information */
+                    socket.emit('getNwkInfoReq');
+                });
+                
+                /* Rcvd network information */
+                socket.on('nwkUpdate', function (data) {
+                    /* Check if the network is connected */
+                    if (!data) {
+                        console.log("network is not started yet, we wait for update");
+                        /* Non Hopping Network */
+                        $panid.text('--');
+                        $coordAddr.text('--');
+                        $security.text('--');
+                        $networkmode.text("Not Started");
+                        /* exit */
+                        return false;
+                    }
+                    
+                    var nwkInfo = JSON.parse(data);
+                    $panid.text('0x' + nwkInfo.panCoord.panId.toString(16).toUpperCase());
+                    $coordAddr.text('0x' + nwkInfo.panCoord.shortAddress.toString(16).toUpperCase());
+                    $networkmode.text(nwkInfo.networkMode);
+                    if (nwkInfo.securityEnabled === 1) {
+                        $security.text("Enabled");
+                    } else {
+                        $security.text("Disabled");
+                    }
+                        
+                    /* Out of box example application does not 
+                      support opening/closing the network in frequency hopping configuration */
+                    if(nwkInfo.networkMode == "Freq Hopping"){
+                        /* Hide the option to open or close the network for new device
+                          joins */
+                        $("#nwkInformationTable tbody tr.networkstate").hide();
+                    }
+                        
+                    /* Display Network State Information */
+                    if (nwkInfo.state == "started") {
+                        $('.networkstate').show();
+                        $("#nwkStateText").text("Network close for New Devices");
+                        $("#allowJoin").text("open");
+                    } else if (nwkInfo.state == "open") {
+                        $("#nwkStateText").text("Network open for New Devices");
+                        $("#allowJoin").text("close");
+                        $('.networkstate').show();
+                    } else if (nwkInfo.state == "close") {
+                        $('.networkstate').show();
+                        $("#nwkStateText").text("Network close for New Devices");
+                        $("#allowJoin").text("open");
+                    }
+
+                    $("#info_log_btn").text(nwkInfo.infoLog ? "open" : "close");
+                    $("#eve003_log_btn").text(nwkInfo.eve003Log ? "open" : "close");
+                    $("#eve004_log_btn").text(nwkInfo.eve004Log ? "open" : "close");
+                    $("#eve005_log_btn").text(nwkInfo.eve005Log ? "open" : "close");
+                    $("#eve006_log_btn").text(nwkInfo.eve006Log ? "open" : "close");
+                });
+              
+                /* Rcvd connDevInfoUpdate message */
+                socket.on('connDevInfoUpdate', function (data) {
+                    collectorApp_updateNwkInfo(data);
+                });
+              
+                /* Rcvd permit join cnf */
+                socket.on('permitJoinCnf', function (data) {
+                    clearInterval(buttonTimer);
+                    if ($allowJoin.html() == "opening..") {
+                        /* need to retry */
+                        $allowJoin.html("close");
+                    } else if ($allowJoin.html() == "closing..") {
+                        /* need to retry */
+                        $allowJoin.html("open");
+                    }
+                });
+
+                socket.on('antennaUpdate', function (data) {
+                    // state : 1 = external , 2 = internal
+                    antennaData = JSON.parse(data);
+
+                    if (antennaData.state == 1) {
+                        $antenna_btn.html("external");
+                    }else{
+                        $antenna_btn.html("internal");
+                    }                    
+                });
+
+                // socket.on('setIntervalUpdate', function (data) {
+                //     window.alert("setIntervalUpdate:" + data);
+                // });
+              
+                /* close connection */
+                $(window).on('beforeunload', function(){
+                    socket.close();
+                });
+            });
+        </script>
+    </body>
+</html>

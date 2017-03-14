@@ -1,0 +1,914 @@
+/******************************************************************************
+
+  @file smsgs.proto
+
+  @brief TIMAC 2.0 - Protobuf definition for items in the smsgs.h (sensor) file
+
+
+  Group: WCS LPC
+  $Target Devices: Linux: AM335x, Embedded Devices: CC1310, CC1350$
+
+  ******************************************************************************
+  $License: BSD3 2016 $
+  
+  Copyright (c) 2015, Texas Instruments Incorporated
+  All rights reserved.
+  
+  Redistribution and use in source and binary forms, with or without
+  modification, are permitted provided that the following conditions
+  are met:
+  
+  * Redistributions of source code must retain the above copyright
+    notice, this list of conditions and the following disclaimer.
+  
+  * Redistributions in binary form must reproduce the above copyright
+    notice, this list of conditions and the following disclaimer in the
+    documentation and/or other materials provided with the distribution.
+  
+  * Neither the name of Texas Instruments Incorporated nor the names of
+    its contributors may be used to endorse or promote products derived
+    from this software without specific prior written permission.
+  
+  THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+  AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO,
+  THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR
+  PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR
+  CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL,
+  EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO,
+  PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS;
+  OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY,
+  WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR
+  OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE,
+  EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+  ******************************************************************************
+  $Release Name: TI-15.4Stack Linux x64 SDK$
+  $Release Date: July 14, 2016 (2.00.00.30)$
+*****************************************************************************/
+
+syntax = "proto2";
+
+/*!
+  Message IDs for Sensor data messages.  When sent over-the-air in a message,
+  this field is one byte.
+*/
+enum Smsgs_cmdIds
+{
+    /*! Configuration message, sent from the collector to the sensor */
+    Smsgs_cmdIds_configReq = 1;
+    /*! Configuration Response message, sent from the sensor to the collector */
+    Smsgs_cmdIds_configRsp = 2;
+    /*! Tracking request message, sent from the the collector to the sensor */
+    Smsgs_cmdIds_trackingReq = 3;
+    /*! Tracking response message, sent from the sensor to the collector */
+    Smsgs_cmdIds_trackingRsp = 4;
+    /*! Sensor data message, sent from the sensor to the collector */
+    Smsgs_cmdIds_sensorData = 5;
+    /* Toggle LED message, sent from the collector to the sensor */
+    Smsgs_cmdIds_toggleLedReq = 6;
+    /* Toggle LED response msg, sent from the sensor to the collector */
+    Smsgs_cmdIds_toggleLedRsp = 7;
+    
+    /*! ======================================================================= */
+    Smsgs_cmdIds_alarmConfigReq = 8;
+    Smsgs_cmdIds_alarmConfigRsp = 9;
+    Smsgs_cmdIds_gSensorConfigReq = 10;
+    Smsgs_cmdIds_gSensorConfigRsp = 11;
+    Smsgs_cmdIds_electricLockConfigReq = 12;
+    Smsgs_cmdIds_electricLockConfigRsp = 13;
+    Smsgs_cmdIds_signalConfigReq = 14;
+    Smsgs_cmdIds_signalConfigRsp = 15;
+    Smsgs_cmdIds_tempConfigReq = 16;
+    Smsgs_cmdIds_tempConfigRsp = 17;
+    Smsgs_cmdIds_lowBatteryConfigReq = 18;
+	  Smsgs_cmdIds_lowBatteryConfigRsp = 19;
+	  Smsgs_cmdIds_distanceConfigReq = 20;
+	  Smsgs_cmdIds_distanceConfigRsp = 21;
+    Smsgs_cmdIds_musicConfigReq = 22;
+    Smsgs_cmdIds_musicConfigRsp = 23;
+    Smsgs_cmdIds_intervalConfigReq = 24;
+    Smsgs_cmdIds_intervalConfigRsp = 25;
+    Smsgs_cmdIds_motionConfigReq = 26;
+    Smsgs_cmdIds_motionConfigRsp = 27;
+    Smsgs_cmdIds_resistanceConfigReq = 28;
+    Smsgs_cmdIds_resistanceConfigRsp = 29;
+    Smsgs_cmdIds_microwaveConfigReq = 30;
+    Smsgs_cmdIds_microwaveConfigRsp = 31;
+    Smsgs_cmdIds_pirConfigReq = 32;
+    Smsgs_cmdIds_pirConfigRsp = 33;
+    Smsgs_cmdIds_setUnsetConfigReq = 34;
+    Smsgs_cmdIds_setUnsetConfigRsp = 35;
+    Smsgs_cmdIds_disconnectReq = 36;
+    Smsgs_cmdIds_disconnectRsp = 37;
+    Smsgs_cmdIds_electricLockActionReq = 38;
+    Smsgs_cmdIds_electricLockActionRsp = 39;
+    Smsgs_cmdIds_antennaReq = 40;
+    Smsgs_cmdIds_antennaRsp = 41;
+    Smsgs_cmdIds_setIntervalReq = 42;
+    Smsgs_cmdIds_setIntervalRsp = 43;
+
+    Smsgs_cmdIds_removeDevice = 100;
+    Smsgs_cmdIds_clean = 101;
+}
+
+/*!
+  Frame Control field states what data fields are included in reported
+  sensor data, each value is a bit mask value so that they can be combined
+  (OR'd together) in a control field.
+  When sent over-the-air in a message this field is 2 bytes.
+*/
+enum Smsgs_dataFields
+{
+    /*! Message Statistics */
+    Smsgs_dataFields_msgStats = 0x0001;
+    /*! Config Settings */
+    Smsgs_dataFields_configSettings = 0x002;
+    /*! Toggle Settings */
+    Smsgs_dataFields_toggleSettings = 0x0004;
+    
+    /*! ======================================================================= */
+    /*! Remote control Sensor */
+    Smsgs_dataFields_eve003Sensor = 0x0008;
+    /*! Signal Sensor */
+    Smsgs_dataFields_eve004Sensor = 0x0010;
+    /*! EVE005 Sensor */
+    Smsgs_dataFields_eve005Sensor = 0x0020;
+    /*! PIR Sensor */
+    Smsgs_dataFields_eve006Sensor = 0x0040;
+}
+
+/*!
+  Status values for the over-the-air messages
+*/
+enum Smsgs_statusValues
+{
+    /*! Success */
+    Smsgs_statusValues_success = 0;
+    /*! Message was invalid and ignored */
+    Smsgs_statusValues_invalid = 1;
+    /*!
+      Config message was received but only some frame control fields
+      can be sent or the reportingInterval or pollingInterval fail
+      range checks.
+    */
+    Smsgs_statusValues_partialSuccess = 2;
+}
+
+/******************************************************************************
+ Structures - Building blocks for the over-the-air sensor messages
+*****************************************************************************/
+
+/*!
+  Configuration Request message: sent from controller to the sensor.
+*/
+message Smsgs_configReqMsg
+{
+    /*! Command ID - 1 byte */
+    required Smsgs_cmdIds cmdId = 1;
+    /*! Frame Control field - bit mask of Smsgs_dataFields */
+    required uint32 frameControl = 2;
+    /*! Reporting Interval */
+    required uint32 reportingInterval = 3;
+    /*! Polling Interval */
+    required uint32 pollingInterval = 4;
+}
+
+/*!
+  Configuration Response message: sent from the sensor to the collector
+  in response to the Configuration Request message.
+*/
+message Smsgs_configRspMsg
+{
+    /*! Command ID - 1 byte */
+    required Smsgs_cmdIds cmdId = 1;
+    /*! Response Status - 1 byte */
+    required Smsgs_statusValues status = 2;
+    /*! Frame Control field - bit mask of Smsgs_dataFields */
+    required uint32 frameControl = 3;
+    /*! Reporting Interval */
+    required uint32 treportingInterval = 4;
+    /*! Polling Interval */
+    required uint32 pollingInterval = 5;
+}
+
+/*!
+  Tracking Request message: sent from controller to the sensor.
+*/
+message Smsgs_trackingReqMsg
+{
+    /*! Command ID */
+    required Smsgs_cmdIds cmdId = 1;
+}
+
+/*!
+  Tracking Response message: sent from the sensor to the collector
+  in response to the Tracking Request message.
+*/
+message Smsgs_trackingRspMsg
+{
+    /*! Command ID */
+    required Smsgs_cmdIds cmdId = 1;
+} 
+
+/*!
+ Toggle Request message: sent from controller to the sensor.
+ */
+message Smsgs_toggleLedReqMsg 
+{
+    /*! Command ID - 1 byte */
+    required Smsgs_cmdIds cmdId = 1;
+} 
+
+/*!
+ Toggle Response message: sent from sensor to the controller.
+ */
+message Smsgs_toggleLedRspMsg
+{
+    /*! Command ID - 1 byte */
+    required Smsgs_cmdIds cmdId = 1;
+    /*! Response Status - 2 bytes */
+    required uint32 ledState = 2;
+} 
+
+/*!
+  Message Statistics Field
+*/
+message Smsgs_msgStatsField
+{
+    /*! total number of join attempts (associate request sent) */
+    required uint32 joinAttempts = 1;
+    /*! total number of join attempts failed */
+    required uint32 joinFails = 2;
+    /*! total number of sensor data messages attempted. */
+    required uint32 msgsAttempted = 3;
+    /*! total number of sensor data messages sent. */
+    required uint32 msgsSent = 4;
+    /*! total number of tracking requests received */
+    required uint32 trackingRequests = 5;
+    /*! total number of tracking response attempted */
+    required uint32 trackingResponseAttempts = 6;
+    /*! total number of tracking response success */
+    required uint32 trackingResponseSent = 7;
+    /*!
+      Total number of Channel Access Failures.  These are indicated in MAC data
+      confirms for MAC data requests.
+    */
+    required uint32 channelAccessFailures = 8;
+    /*!
+      Total number of MAC ACK failures. These are indicated in MAC data
+      confirms for MAC data requests.
+    */
+    required uint32 macAckFailures = 9;
+    /*!
+      Total number of MAC data request failures, other than channel access
+      failure or MAC ACK failures.
+    */
+    required uint32 otherDataRequestFailures = 10;
+    /*! Total number of sync loss failures received for sleepy devices. */
+    required uint32 syncLossIndications = 11;
+}
+
+/*!
+  Message Statistics Field
+*/
+message Smsgs_configSettingsField
+{
+    /*!
+      Reporting Interval - in millseconds, how often to report, 0
+      means reporting is off
+    */
+    required uint32 reportingInterval = 1;
+    /*!
+      Polling Interval - in millseconds (32 bits) - If the sensor device is
+      a sleep device, this states how often the device polls its parent for
+      data. This field is 0 if the device doesn't sleep.
+    */
+    required uint32 pollingInterval = 2;
+}
+
+/*!
+  Sensor Data message: sent from the sensor to the collector
+*/
+message Smsgs_sensorMsg
+{
+    /*! Command ID */
+    required Smsgs_cmdIds cmdId = 1;
+    /*! Dummy value so we have a fixed item */
+    required uint32 frameControl = 2;
+    /*!
+      Message Statistics field
+    */
+    optional Smsgs_msgStatsField msgStats = 3;
+    /*!
+      Configuration Settings field
+    */
+    optional Smsgs_configSettingsField configSettings = 4;
+
+	  /*! ======================================================================= */
+    /*!
+      Remote control Sensor field
+      is set in frameControl.
+    */
+    optional Smsgs_eve003SensorField eve003Sensor = 5;
+    /*!
+      Signal Sensor field
+      is set in frameControl.
+    */
+    optional Smsgs_eve004SensorField eve004Sensor = 6;
+    /*!
+      EVE005 Sensor field
+      is set in frameControl.
+    */
+    optional Smsgs_eve005SensorField eve005Sensor = 7;
+    /*!
+      PIR Sensor field
+      is set in frameControl.
+    */
+    optional Smsgs_eve006SensorField eve006Sensor = 8;
+}
+
+/*! ======================================================================= */
+/*!
+  Remote Control Sensor Field
+*/
+message Smsgs_eve003SensorField
+{
+    /*! 
+  	  bit0: button1
+  	  bit1: button2
+  	  bit2: button3
+  	  bit3: button state, 0: short, 1: long
+    */
+    required uint32 button = 1;
+    /*! 
+  	  bit0: eve003 type, 0 = 客戶, 1 = 巡查
+  	  bit1: alarm enable
+  	  bit2: button3 type, 0 = 分區, 1 = 電鎖
+    */
+    required uint32 dip = 2;
+    /*! 
+  	  bit0: reset
+  	  bit1: pairing
+    */
+    required uint32 setting = 3;
+    /*! Battery Data */
+    required uint32 battery = 4;
+}
+/*!
+  Signal Sensor Field
+*/
+message Smsgs_eve004SensorField
+{
+    /*! bit0: 	0(+) 1(-)
+		  bit1~7: temp value
+	  */
+    required uint32 tempValue = 1;
+    /*! 0:未觸發, 1:觸發
+      bit0:G-Sensor state
+      bit1:巡察鈕
+      bit2:reset
+      bit3:pairing
+      bit4: relay1 state
+      bit5:relay2 state 
+    */
+    required uint32 state = 2;
+    /*!
+  	  bit0:temp alarm(5%)
+  	  bit1:temp abnormal
+  	  bit2:Low battery alarm(5%)
+  	  bit3:Low battery abnormal
+    */
+    required uint32 alarm = 3;
+    required uint32 dip = 4;
+    required uint32 battery = 5;
+    required uint32 rssi = 6;
+}
+/*!
+  EVE005 Sensor Field
+*/
+message Smsgs_eve005SensorField
+{
+    /*! bit0: 	0(+) 1(-)
+		  bit1~7: temp value
+	  */
+    required uint32 tmpValue = 1;
+    /*!
+  	  battery value
+    */
+    required uint32 batValue = 2;
+    required uint32 rssi = 3;
+    /*!
+  	  bit0:reset
+  	  bit1:paring
+    */
+    required uint32 button = 4;
+    required uint32 dip_id = 5;
+    /*!
+  	  bit0:Z1 enable
+  	  bit1:Z2 enable
+  	  bit2:12V enable
+  	  bit3:磁簧 enable
+    */
+    required uint32 dip_control = 6;
+    /*!
+  	  bit0:磁簧 0=close, 1= open
+  	  bit1:Z1 2k
+  	  bit2:Z2 2k
+  	  bit3:Z1
+  	  bit4:Z2
+  	  bit4:G-Sensor
+    */
+    required uint32 sensor_s = 7;
+    /*!
+      bit0:temp alarm(5%)
+      bit1:temp abnormal
+      bit2:Low battery alarm(5%)
+      bit3:Low battery abnormal
+    */
+    required uint32 alarm = 8;
+    /*!
+      0k - 4.4k = (0 - 44)
+    */
+    required uint32 resist1 = 9;
+    required uint32 resist2 = 10;
+}
+/*!
+  PIR Sensor Field
+*/
+message Smsgs_eve006SensorField
+{
+    /*! 
+      bit0: reset
+      bit1: pairing
+      bit2: clean
+    */
+    required uint32 button = 1;
+    /*!
+      bit0: pir status
+      bit1: mircrowave state
+      bit2: 2.2k IO state1
+      bit3: 2.2k IO loop1
+      bit4: 2.2k IO state2
+      bit5: 2.2k IO loop2
+    */
+    required uint32 state = 2;
+    /*! 
+      bit0: G-Sensor status 
+      bit1: Temp alarm
+      bit2: Temp abnormal
+      bit3: battery alarm
+      bit4: battery abnormal
+      bit5: pir abnormal
+    */
+    required uint32 abnormal = 3;
+    /*!
+      bit0: IO1
+      bit1: IO2
+      bit2: 0
+      bit3: Reserved
+    */
+    required uint32 dip = 4;
+    required uint32 dip_id = 5;
+    /*! bit0:   0(+) 1(-)
+      bit1~7: temp value
+    */
+    required uint32 temp = 6;
+    required uint32 humidity = 7;
+    required uint32 battery = 8;
+    /*!
+      0k - 4.4k = (0 - 44)
+    */
+    required uint32 resist1 = 9;
+    required uint32 resist2 = 10;
+}
+
+message Smsgs_alarmConfigReqMsg
+{
+    /*! Command ID - 1 byte */
+    required Smsgs_cmdIds cmdId = 1;
+    /*! Frame Control field - bit mask of Smsgs_dataFields */
+    required uint32 frameControl = 2;
+    /*! time , second */
+    required uint32 time = 3;
+}
+
+message Smsgs_alarmConfigRspMsg
+{
+    /*! Command ID - 1 byte */
+    required Smsgs_cmdIds cmdId = 1;
+    /*! Response Status - 1 byte */
+    required Smsgs_statusValues status = 2;
+    /*! Frame Control field - bit mask of Smsgs_dataFields */
+    required uint32 frameControl = 3;
+    /*! time, second */
+    required uint32 time = 4;
+}
+
+message Smsgs_gSensorConfigReqMsg
+{
+    /*! Command ID - 1 byte */
+    required Smsgs_cmdIds cmdId = 1;
+    /*! Frame Control field - bit mask of Smsgs_dataFields */
+    required uint32 frameControl = 2;
+    /*! bit0:Gsensor ,bit1:speaker */
+    required uint32 enable = 3;
+    /*! Sensitivity */
+    required uint32 sensitivity = 4;
+}
+
+message Smsgs_gSensorConfigRspMsg
+{
+    /*! Command ID - 1 byte */
+    required Smsgs_cmdIds cmdId = 1;
+    /*! Response Status - 1 byte */
+    required Smsgs_statusValues status = 2;
+    /*! Frame Control field - bit mask of Smsgs_dataFields */
+    required uint32 frameControl = 3;
+    /*! bit0:Gsensor ,bit1:speaker */
+    required uint32 enable = 4;
+    /*! Sensitivity */
+    required uint32 sensitivity = 5;
+}
+
+message Smsgs_electricLockConfigReqMsg
+{
+    /*! Command ID - 1 byte */
+    required Smsgs_cmdIds cmdId = 1;
+    /*! Frame Control field - bit mask of Smsgs_dataFields */
+    required uint32 frameControl = 2;
+    /*! bit0:enable */
+    required uint32 enable = 3;
+    /*! time, second */
+    required uint32 time = 4;
+}
+
+message Smsgs_electricLockConfigRspMsg
+{
+    /*! Command ID - 1 byte */
+    required Smsgs_cmdIds cmdId = 1;
+    /*! Response Status - 1 byte */
+    required Smsgs_statusValues status = 2;
+    /*! Frame Control field - bit mask of Smsgs_dataFields */
+    required uint32 frameControl = 3;
+    /*! bit0:enable */
+    required uint32 enable = 4;
+    /*! time, second */
+    required uint32 time = 5;
+}
+
+message Smsgs_signalConfigReqMsg
+{
+    /*! Command ID - 1 byte */
+    required Smsgs_cmdIds cmdId = 1;
+    /*! Frame Control field - bit mask of Smsgs_dataFields */
+    required uint32 frameControl = 2;
+    /*! 1:auto  0:manual */
+    required uint32 mode = 3;
+    /*! value */
+    required uint32 value = 4;
+    /*! offset */
+    required uint32 offset = 5;
+}
+
+message Smsgs_signalConfigRspMsg
+{
+    /*! Command ID - 1 byte */
+    required Smsgs_cmdIds cmdId = 1;
+    /*! Response Status - 1 byte */
+    required Smsgs_statusValues status = 2;
+    /*! Frame Control field - bit mask of Smsgs_dataFields */
+    required uint32 frameControl = 3;
+    /*! 1:auto  0:manual */
+    required uint32 mode = 4;
+    /*! value */
+    required uint32 value = 5;
+    /*! offset */
+    required uint32 offset = 6;
+}
+
+message Smsgs_tempConfigReqMsg
+{
+    /*! Command ID - 1 byte */
+    required Smsgs_cmdIds cmdId = 1;
+    /*! Frame Control field - bit mask of Smsgs_dataFields */
+    required uint32 frameControl = 2;
+    /*! value */
+    required uint32 value = 3;
+    /*! offset */
+    required uint32 offset = 4;
+}
+
+message Smsgs_tempConfigRspMsg
+{
+    /*! Command ID - 1 byte */
+    required Smsgs_cmdIds cmdId = 1;
+    /*! Response Status - 1 byte */
+    required Smsgs_statusValues status = 2;
+    /*! Frame Control field - bit mask of Smsgs_dataFields */
+    required uint32 frameControl = 3;
+    /*! value */
+    required uint32 value = 4;
+    /*! offset */
+    required uint32 offset = 5;
+}
+
+message Smsgs_lowBatteryConfigReqMsg
+{
+    /*! Command ID - 1 byte */
+    required Smsgs_cmdIds cmdId = 1;
+    /*! Frame Control field - bit mask of Smsgs_dataFields */
+    required uint32 frameControl = 2;
+    /*! value */
+    required uint32 value = 3;
+    /*! offset */
+    required uint32 offset = 4;
+}
+
+message Smsgs_lowBatteryConfigRspMsg
+{
+    /*! Command ID - 1 byte */
+    required Smsgs_cmdIds cmdId = 1;
+    /*! Response Status - 1 byte */
+    required Smsgs_statusValues status = 2;
+    /*! Frame Control field - bit mask of Smsgs_dataFields */
+    required uint32 frameControl = 3;
+    /*! value */
+    required uint32 value = 4;
+    /*! offset */
+    required uint32 offset = 5;
+}
+
+message Smsgs_distanceConfigReqMsg
+{
+    /*! Command ID - 1 byte */
+    required Smsgs_cmdIds cmdId = 1;
+    /*! Frame Control field - bit mask of Smsgs_dataFields */
+    required uint32 frameControl = 2;
+    /*! 1:auto  0:manual */
+    required uint32 mode = 3;
+    /*! distance, meter */
+    required uint32 distance = 4;
+}
+
+message Smsgs_distanceConfigRspMsg
+{
+    /*! Command ID - 1 byte */
+    required Smsgs_cmdIds cmdId = 1;
+    /*! Response Status - 1 byte */
+    required Smsgs_statusValues status = 2;
+    /*! Frame Control field - bit mask of Smsgs_dataFields */
+    required uint32 frameControl = 3;
+    /*! 1:auto  0:manual */
+    required uint32 mode = 4;
+    /*! distance, meter */
+    required uint32 distance = 5;
+}
+
+message Smsgs_musicConfigReqMsg
+{
+    /*! Command ID - 1 byte */
+    required Smsgs_cmdIds cmdId = 1;
+    /*! Frame Control field - bit mask of Smsgs_dataFields */
+    required uint32 frameControl = 2;
+    /*! music mode */
+    required uint32 mode = 3;
+    /*! time, second */
+    required uint32 time = 4;
+}
+
+message Smsgs_musicConfigRspMsg
+{
+    /*! Command ID - 1 byte */
+    required Smsgs_cmdIds cmdId = 1;
+    /*! Response Status - 1 byte */
+    required Smsgs_statusValues status = 2;
+    /*! Frame Control field - bit mask of Smsgs_dataFields */
+    required uint32 frameControl = 3;
+    /*! music mode */
+    required uint32 mode = 4;
+    /*! time, second */
+    required uint32 time = 5;
+}
+
+message Smsgs_intervalConfigReqMsg
+{
+    /*! Command ID - 1 byte */
+    required Smsgs_cmdIds cmdId = 1;
+    /*! Frame Control field - bit mask of Smsgs_dataFields */
+    required uint32 frameControl = 2;
+    /*! music mode */
+    required uint32 mode = 3;
+    /*! time, second */
+    required uint32 time = 4;
+}
+
+message Smsgs_intervalConfigRspMsg
+{
+    /*! Command ID - 1 byte */
+    required Smsgs_cmdIds cmdId = 1;
+    /*! Response Status - 1 byte */
+    required Smsgs_statusValues status = 2;
+    /*! Frame Control field - bit mask of Smsgs_dataFields */
+    required uint32 frameControl = 3;
+    /*! music mode */
+    required uint32 mode = 4;
+    /*! time, second */
+    required uint32 time = 5;
+}
+
+message Smsgs_motionConfigReqMsg
+{
+    /*! Command ID - 1 byte */
+    required Smsgs_cmdIds cmdId = 1;
+    /*! Frame Control field - bit mask of Smsgs_dataFields */
+    required uint32 frameControl = 2;
+    /*! count */
+    required uint32 count = 3;
+    /*! time, second */
+    required uint32 time = 4;
+}
+
+message Smsgs_motionConfigRspMsg
+{
+    /*! Command ID - 1 byte */
+    required Smsgs_cmdIds cmdId = 1;
+    /*! Response Status - 1 byte */
+    required Smsgs_statusValues status = 2;
+    /*! Frame Control field - bit mask of Smsgs_dataFields */
+    required uint32 frameControl = 3;
+    /*! count */
+    required uint32 count = 4;
+    /*! time, second */
+    required uint32 time = 5;
+}
+
+message Smsgs_resistanceConfigReqMsg
+{
+    /*! Command ID - 1 byte */
+    required Smsgs_cmdIds cmdId = 1;
+    /*! Frame Control field - bit mask of Smsgs_dataFields */
+    required uint32 frameControl = 2;
+    /*! value */
+    required uint32 value = 3;
+}
+
+message Smsgs_resistanceConfigRspMsg
+{
+    /*! Command ID - 1 byte */
+    required Smsgs_cmdIds cmdId = 1;
+    /*! Response Status - 1 byte */
+    required Smsgs_statusValues status = 2;
+    /*! Frame Control field - bit mask of Smsgs_dataFields */
+    required uint32 frameControl = 3;
+    /*! value */
+    required uint32 value = 4;
+}
+
+message Smsgs_microwaveConfigReqMsg
+{
+    /*! Command ID - 1 byte */
+    required Smsgs_cmdIds cmdId = 1;
+    /*! Frame Control field - bit mask of Smsgs_dataFields */
+    required uint32 frameControl = 2;
+    /*! enable */
+    required uint32 enable = 3;
+    /*! sensitivity */
+    required uint32 sensitivity = 4;
+}
+
+message Smsgs_microwaveConfigRspMsg
+{
+    /*! Command ID - 1 byte */
+    required Smsgs_cmdIds cmdId = 1;
+    /*! Response Status - 1 byte */
+    required Smsgs_statusValues status = 2;
+    /*! Frame Control field - bit mask of Smsgs_dataFields */
+    required uint32 frameControl = 3;
+    /*! enable */
+    required uint32 enable = 4;
+    /*! sensitivity */
+    required uint32 sensitivity = 5;
+}
+
+message Smsgs_pirConfigReqMsg
+{
+    /*! Command ID - 1 byte */
+    required Smsgs_cmdIds cmdId = 1;
+    /*! Frame Control field - bit mask of Smsgs_dataFields */
+    required uint32 frameControl = 2;
+    /*! enable */
+    required uint32 enable = 3;
+}
+
+message Smsgs_pirConfigRspMsg
+{
+    /*! Command ID - 1 byte */
+    required Smsgs_cmdIds cmdId = 1;
+    /*! Response Status - 1 byte */
+    required Smsgs_statusValues status = 2;
+    /*! Frame Control field - bit mask of Smsgs_dataFields */
+    required uint32 frameControl = 3;
+    /*! enable */
+    required uint32 enable = 4;
+}
+
+message Smsgs_setUnsetConfigReqMsg
+{
+    /*! Command ID - 1 byte */
+    required Smsgs_cmdIds cmdId = 1;
+    /*! Frame Control field - bit mask of Smsgs_dataFields */
+    required uint32 frameControl = 2;
+    /*! state */
+    required uint32 state = 3;
+}
+
+message Smsgs_setUnsetConfigRspMsg
+{
+    /*! Command ID - 1 byte */
+    required Smsgs_cmdIds cmdId = 1;
+    /*! Response Status - 1 byte */
+    required Smsgs_statusValues status = 2;
+    /*! Frame Control field - bit mask of Smsgs_dataFields */
+    required uint32 frameControl = 3;
+    /*! state */
+    required uint32 state = 4;
+}
+
+message Smsgs_disconnectReqMsg
+{
+    /*! Command ID - 1 byte */
+    required Smsgs_cmdIds cmdId = 1;
+    /*! Frame Control field - bit mask of Smsgs_dataFields */
+    required uint32 frameControl = 2;
+    /*! delay time, second, if time is zero then immediately discoonected. */
+    required uint32 time = 3;
+}
+
+message Smsgs_disconnectRspMsg
+{
+    /*! Command ID - 1 byte */
+    required Smsgs_cmdIds cmdId = 1;
+    /*! Response Status - 1 byte */
+    required Smsgs_statusValues status = 2;
+    /*! Frame Control field - bit mask of Smsgs_dataFields */
+    required uint32 frameControl = 3;
+    /*! delay time, second, if time is zero then immediately discoonected. */
+    required uint32 time = 4;
+}
+
+message Smsgs_electricLockActionReqMsg
+{
+    /*! Command ID - 1 byte */
+    required Smsgs_cmdIds cmdId = 1;
+    /*! Frame Control field - bit mask of Smsgs_dataFields */
+    required uint32 frameControl = 2;
+    /*! bit0:relay1 action
+        bit1:relay2 action */
+    required uint32 relay = 3;
+}
+
+message Smsgs_electricLockActionRspMsg
+{
+    /*! Command ID - 1 byte */
+    required Smsgs_cmdIds cmdId = 1;
+    /*! Response Status - 1 byte */
+    required Smsgs_statusValues status = 2;
+    /*! Frame Control field - bit mask of Smsgs_dataFields */
+    required uint32 frameControl = 3;
+    /*! bit0:relay1 action
+        bit1:relay2 action */
+    required uint32 relay = 4;
+}
+
+message Smsgs_antennaReqMsg
+{
+    required uint32 state = 1;
+}
+
+message Smsgs_antennaRspMsg
+{
+    required uint32 state = 1;
+}
+
+message Smsgs_setIntervalReqMsg
+{
+    required uint32 reporting = 1;
+    required uint32 polling = 2;
+}
+
+message Smsgs_setIntervalRspMsg
+{
+    required uint32 reporting = 1;
+    required uint32 polling = 2;
+}
+
+
+//  ========================================
+//  Texas Instruments Micro Controller Style
+//  ========================================
+//  Local Variables:
+//  mode: protobuf
+//  tab-width: 4
+//  c-basic-offset: 4
+//  indent-tabs-mode: nil
+//  End:
+//  vim:set  tabstop=4 shiftwidth=4 expandtab=true

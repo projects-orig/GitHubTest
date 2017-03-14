@@ -1,0 +1,12 @@
+Script started on Thu 16 Feb 2017 03:36:00 PM CST
+make -f Makefile ARCH=host 
+make[1]: Entering directory `/home/jason-lin/eve_A8.cotest/eve_A8/users/TI_SDK/ti154/components/api'
+Compling: src/mt_msg_ini.c
+Compling: src/mt_msg.c
+Compling: src/api_mac.c
+Compling: src/mt_msg_dbg_core.c
+Compling: src/mt_msg_dbg_load.c
+Creating Lib: objs/host/libapimac.a
+make[1]: Leaving directory `/home/jason-lin/eve_A8.cotest/eve_A8/users/TI_SDK/ti154/components/api'
+
+Script done on Thu 16 Feb 2017 03:36:01 PM CST

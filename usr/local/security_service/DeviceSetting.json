@@ -1,0 +1,10 @@
+{
+    "DeviceSetting":[
+    {
+        "time":"",
+        "version":"",
+        "sendMsg_time_when_enabled":"30",
+        "sendMsg_time_when_disabled":"60"
+    }
+    ]
+}

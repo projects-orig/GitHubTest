@@ -1,0 +1,31 @@
+Script started on Thu 16 Feb 2017 03:37:39 PM CST
+make -f Makefile ARCH=bbb 
+make[1]: Entering directory `/home/jason-lin/eve_A8.cotest/eve_A8/users/TI_SDK/ti154/components/common'
+Compling: linux/linux_specific.c
+Compling: linux/linux_uart.c
+Compling: src/debug_helpers.c
+Compling: src/fatal.c
+Compling: src/fifo.c
+Compling: src/hexline.c
+Compling: src/ini_file.c
+Compling: src/log.c
+Compling: src/log_ini.c
+Compling: src/mutex.c
+Compling: src/rand_data.c
+Compling: src/stream_common.c
+Compling: src/stream_file.c
+Compling: src/stream_mem.c
+Compling: src/stream_socket_client.c
+Compling: src/stream_socket_ini.c
+Compling: src/stream_socket_private.c
+Compling: src/stream_socket_server.c
+Compling: src/stream_uart_ini.c
+Compling: src/threads.c
+Compling: src/timer.c
+Compling: src/timer_cb.c
+Compling: src/ti_semaphore.c
+Compling: src/unix_fdrw.c
+Creating Lib: objs/bbb/libcommon.a
+make[1]: Leaving directory `/home/jason-lin/eve_A8.cotest/eve_A8/users/TI_SDK/ti154/components/common'
+
+Script done on Thu 16 Feb 2017 03:37:39 PM CST

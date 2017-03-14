@@ -1,0 +1,11 @@
+Script started on Thu 16 Feb 2017 03:37:40 PM CST
+make -f Makefile ARCH=bbb 
+make[1]: Entering directory `/home/jason-lin/eve_A8.cotest/eve_A8/users/TI_SDK/ti154/example/collector'
+mkdir -p objs/bbb
+Processing protocol file: appsrv.proto
+/bin/bash: ../google/install/bin/protoc-c: cannot execute binary file: Exec format error
+make[1]: *** [appsrv.pb-c.c] Error 126
+make[1]: Leaving directory `/home/jason-lin/eve_A8.cotest/eve_A8/users/TI_SDK/ti154/example/collector'
+make: *** [bbb] Error 2
+
+Script done on Thu 16 Feb 2017 03:37:40 PM CST

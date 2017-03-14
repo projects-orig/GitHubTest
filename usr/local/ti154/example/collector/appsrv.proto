@@ -1,0 +1,297 @@
+/******************************************************************************
+
+ @file appsrv.proto
+
+ @brief TIMAC 2.0 - Protobuf definition for the primary over the wire items
+                    These are the primary messages between the example
+                    application server and the appClient interface
+
+ Group: WCS LPC
+ $Target Devices: Linux: AM335x, Embedded Devices: CC1310, CC1350$
+
+ ******************************************************************************
+ $License: BSD3 2016 $
+  
+   Copyright (c) 2015, Texas Instruments Incorporated
+   All rights reserved.
+  
+   Redistribution and use in source and binary forms, with or without
+   modification, are permitted provided that the following conditions
+   are met:
+  
+   *  Redistributions of source code must retain the above copyright
+      notice, this list of conditions and the following disclaimer.
+  
+   *  Redistributions in binary form must reproduce the above copyright
+      notice, this list of conditions and the following disclaimer in the
+      documentation and/or other materials provided with the distribution.
+  
+   *  Neither the name of Texas Instruments Incorporated nor the names of
+      its contributors may be used to endorse or promote products derived
+      from this software without specific prior written permission.
+  
+   THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+   AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO,
+   THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR
+   PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR
+   CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL,
+   EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO,
+   PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS;
+   OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY,
+   WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR
+   OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE,
+   EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ ******************************************************************************
+ $Release Name: TI-15.4Stack Linux x64 SDK$
+ $Release Date: July 14, 2016 (2.00.00.30)$
+ *****************************************************************************/
+
+syntax = "proto2";
+
+import "smsgs.proto";
+import "api_mac.proto";
+import "llc.proto";
+import "cllc.proto";
+import "csf.proto";
+
+/* MT System ID for TIMAC APP Server Interface Protobuf sub-system ID */
+enum timacAppSrvSysId
+{
+  RPC_SYS_PB_TIMAC_APPSRV = 10;
+}
+
+/* Command IDs - each of these are associated with Request, 
+ * Responses, Indications, and Confirm messages 
+ */
+enum appsrv_CmdId
+{
+    APPSRV_DEVICE_JOINED_IND = 1;
+    APPSRV_DEVICE_LEFT_IND = 2;
+    APPSRV_NWK_INFO_IND = 3;
+    APPSRV_GET_NWK_INFO_REQ = 4;
+    APPSRV_GET_NWK_INFO_RSP = 5;
+    APPSRV_GET_NWK_INFO_CNF = 6;
+    APPSRV_GET_DEVICE_ARRAY_REQ = 7;
+    APPSRV_GET_DEVICE_ARRAY_CNF = 8;
+    APPSRV_DEVICE_NOTACTIVE_UPDATE_IND = 9;
+    APPSRV_DEVICE_DATA_RX_IND = 10;
+    APPSRV_COLLECTOR_STATE_CNG_IND = 11;
+    APPSRV_SET_JOIN_PERMIT_REQ = 12;
+    APPSRV_SET_JOIN_PERMIT_CNF = 13;
+    APPSRV_TX_DATA_REQ = 14;
+    APPSRV_TX_DATA_CNF = 15;
+    APPSRV_PAIRING_IND = 16;
+    APPSRV_ANTENNA_IND = 17;
+    APPSRV_SET_INTERVAL_IND = 18;
+}
+
+enum nwkMode
+{
+    BEACON_ENABLED = 1;
+    NON_BEACON = 2;
+    FREQUENCY_HOPPING = 3;
+}
+
+// APPSRV_TX_DATA_REQ
+message appsrv_txDataReq
+{
+    required appsrv_CmdId cmdId = 1 [default = APPSRV_TX_DATA_REQ];  // don't change this field
+    required Smsgs_cmdIds msgId = 2;
+    required ApiMac_deviceDescriptor devDescriptor = 3;
+    optional Smsgs_configReqMsg configReqMsg = 4;
+    optional Smsgs_toggleLedReqMsg toggleLedReq = 5;
+    
+    /*! ====================================================================== */
+    optional Smsgs_alarmConfigReqMsg alarmConfigReqMsg = 6;
+    optional Smsgs_gSensorConfigReqMsg gSensorConfigReqMsg = 7;
+    optional Smsgs_electricLockConfigReqMsg electricLockConfigReqMsg = 8;
+    optional Smsgs_signalConfigReqMsg signalConfigReqMsg = 9;
+    optional Smsgs_tempConfigReqMsg tempConfigReqMsg = 10;
+    optional Smsgs_lowBatteryConfigReqMsg lowBatteryConfigReqMsg = 11;
+    optional Smsgs_distanceConfigReqMsg distanceConfigReqMsg = 12;
+    optional Smsgs_musicConfigReqMsg musicConfigReqMsg = 13;
+    optional Smsgs_intervalConfigReqMsg intervalConfigReqMsg = 14;
+    optional Smsgs_motionConfigReqMsg motionConfigReqMsg = 15;
+    optional Smsgs_resistanceConfigReqMsg resistanceConfigReqMsg = 16;
+    optional Smsgs_microwaveConfigReqMsg microwaveConfigReqMsg = 17;
+    optional Smsgs_pirConfigReqMsg pirConfigReqMsg = 18;
+    optional Smsgs_setUnsetConfigReqMsg setUnsetConfigReqMsg = 19;
+    optional Smsgs_disconnectReqMsg disconnectReqMsg = 20;
+    optional Smsgs_electricLockActionReqMsg electricLockActionReqMsg = 21;
+    optional Smsgs_antennaReqMsg antennaReqMsg = 22;
+    optional Smsgs_setIntervalReqMsg setIntervalReqMsg = 23;
+}
+
+//APPSRV_TX_DATA_CNF
+message appsrv_txDataCnf
+{
+  required appsrv_CmdId cmdId = 1 [default = APPSRV_TX_DATA_CNF]; // don't change this field
+  required int32 status = 2; 
+}
+
+// APPSRV_SET_JOIN_PERMIT_REQ
+message appsrv_setJoinPermitReq
+{
+    required appsrv_CmdId cmdId = 1 [default = APPSRV_SET_JOIN_PERMIT_REQ];  // don't change this field
+ //   duration - duration for join permit to be turned on in
+ //              milliseconds.
+ //              0 sets it Off, 0xFFFFFFFF sets it ON indefinitely
+ //              Any other non zero value sets it on for that duration */
+    required int32 duration = 2;
+    
+}
+// APPSRV_SET_JOIN_PERMIT_CNF
+message appsrv_setJoinPermitCnf
+{
+  // provides the result of processing of the 
+  // APPSRV_SET_JOIN_PERMIT_REQ message
+  required int32 status = 1;
+}
+
+// APPSRV_DEVICE_JOINED_IND
+message appsrv_deviceUpdateInd
+{
+    required ApiMac_deviceDescriptor devDescriptor = 1;
+    required ApiMac_capabilityInfo devCapInfo = 2;
+}
+
+// APPSRV_DEVICE_NOTACTIVE_UPDATE_IND
+message appsrv_deviceNotActiveUpdateInd
+{
+    required ApiMac_deviceDescriptor devDescriptor = 1;
+    required uint32 timeout = 2;
+}
+
+// APPSRV_DEVICE_DATA_RX_IND
+message appsrv_deviceDataRxInd
+{
+    required ApiMac_sAddr srcAddr = 1;
+    required sint32 rssi = 2;
+    optional Smsgs_sensorMsg sDataMsg = 4; 
+    optional Smsgs_configRspMsg sConfigMsg = 5;
+    
+    /*! ====================================================================== */
+    optional Smsgs_alarmConfigRspMsg sAlarmConfigMsg = 6;
+    optional Smsgs_gSensorConfigRspMsg sGSensorConfigMsg = 7;
+    optional Smsgs_electricLockConfigRspMsg sElectricLockConfigMsg = 8;
+    optional Smsgs_signalConfigRspMsg sSignalConfigMsg = 9;
+    optional Smsgs_tempConfigRspMsg sTempConfigMsg = 10;
+    optional Smsgs_lowBatteryConfigRspMsg sLowBatteryConfigMsg = 11;
+    optional Smsgs_distanceConfigRspMsg sDistanceConfigMsg = 12;
+    optional Smsgs_musicConfigRspMsg sMusicConfigMsg = 13;
+    optional Smsgs_intervalConfigRspMsg sIntervalConfigMsg = 14;
+    optional Smsgs_motionConfigRspMsg sMotionConfigMsg = 15;
+    optional Smsgs_resistanceConfigRspMsg sResistanceConfigMsg = 16;
+    optional Smsgs_microwaveConfigRspMsg sMicrowaveConfigMsg = 17;
+    optional Smsgs_pirConfigRspMsg sPirConfigMsg = 18;
+    optional Smsgs_setUnsetConfigRspMsg sSetUnsetConfigMsg = 19;
+    optional Smsgs_disconnectRspMsg sDisconnectMsg = 20;
+    optional Smsgs_electricLockActionRspMsg sElectricLockActionMsg = 21;
+    optional Smsgs_antennaRspMsg sAntennaConfigMsg = 22;
+    optional Smsgs_setIntervalRspMsg sSetIntervalConfigMsg = 23;
+}
+
+message appsrv_collectorStateCngUpdateInd
+{
+    required uint32 state = 1;
+}
+
+// sub-message for the network parameters
+// used by appsrv_nwkInfoUpdateInd 
+// and appsrv_getNwkInfoCnf
+message appsrv_nwkParam
+{
+    required Llc_netInfo nwkInfo = 1;
+    required int32 securityEnabled = 2;
+    required nwkMode networkMode = 3;
+    required Cllc_states state = 4;
+}
+
+message appsrv_nwkInfoUpdateInd
+{
+   required appsrv_nwkParam nwkinfo = 1;
+}
+
+// APPSRV_GET_NWK_INFO_REQ
+message appsrv_getNwkInfoReq
+{
+  // APPSRV_GET_NWK_INFO_REQ - command ID used to identify this message
+  // Get network Information Request - This API is called by the appClient application to retrieve
+  // the network information
+  // Returns appsrv_getNwkInfoRsp_t 
+
+  required appsrv_CmdId cmdId = 1 [default = APPSRV_GET_NWK_INFO_REQ];  // don't change this field
+}
+
+// APPSRV_GET_NWK_INFO_CNF
+message appsrv_getNwkInfoCnf
+{
+  // APPSRV_GET_NWK_INFO_REQ - command ID used to identify this message
+  // Get network Information Request - This API is called by the appClient application to retrieve
+  // the network information
+  
+    required appsrv_CmdId cmdId = 1 [default = APPSRV_GET_NWK_INFO_CNF];  // don't change this field
+    required uint32 status = 2;
+    optional appsrv_nwkParam nwkinfo = 3;
+    
+}
+
+// APPSRV_GET_DEVICE_ARRAY_REQ
+message appsrv_getDeviceArrayReq
+{
+  // APPSRV_GET_DEVICE_ARRAY_REQ - command ID used to identify this message
+  // Get list of the connected devices Request 
+  // This API is called by the appClient application to retrieve
+  // the list of currently connected devices 
+  // Returns appsrv_getNwkInfoCnf 
+
+  required appsrv_CmdId cmdId = 1 [default = APPSRV_GET_DEVICE_ARRAY_REQ];  // don't change this field
+}
+
+// APPSRV_GET_DEVICE_ARRAY_CNF
+message appsrv_getDeviceArrayCnf
+{
+    required appsrv_CmdId cmdId = 1 [default = APPSRV_GET_DEVICE_ARRAY_CNF];  // don't change this field
+    required uint32 status = 2;
+    repeated Csf_deviceInformation devInfo = 3;
+}
+
+message appsrv_pairingUpdateInd
+{
+    required uint32 state = 1;
+}
+
+message appsrv_antennaReqMsg
+{
+    required uint32 state = 1;
+}
+
+message appsrv_antennaUpdateInd
+{
+    required uint32 state = 1;
+}
+
+message appsrv_setIntervalReqMsg
+{
+    required uint32 reporting = 1;
+    required uint32 polling = 2;
+}
+
+message appsrv_setIntervalUpdateInd
+{
+    required ApiMac_sAddr srcAddr = 1;
+    required uint32 reporting = 2;
+    required uint32 polling = 3;
+}
+
+//  ========================================
+//  Texas Instruments Micro Controller Style
+//  ========================================
+//  Local Variables:
+//  mode: protobuf
+//  tab-width: 4
+//  c-basic-offset: 4
+//  indent-tabs-mode: nil
+//  End:
+//  vim:set  tabstop=4 shiftwidth=4 expandtab=true
+

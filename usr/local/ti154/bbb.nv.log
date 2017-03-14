@@ -1,0 +1,8 @@
+Script started on Thu 16 Feb 2017 03:37:39 PM CST
+make -f Makefile ARCH=bbb 
+make[1]: Entering directory `/home/jason-lin/eve_A8.cotest/eve_A8/users/TI_SDK/ti154/components/nv'
+Compling: linux/nv_linux.c
+Creating Lib: objs/bbb/libnv.a
+make[1]: Leaving directory `/home/jason-lin/eve_A8.cotest/eve_A8/users/TI_SDK/ti154/components/nv'
+
+Script done on Thu 16 Feb 2017 03:37:39 PM CST

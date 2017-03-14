@@ -1,0 +1,133 @@
+/******************************************************************************
+
+ @file cllc.proto
+
+ @brief TIMAC 2.0 - Protobuf definition for items in the cllc.h file
+
+ Group: WCS LPC
+ $Target Devices: Linux: AM335x, Embedded Devices: CC1310, CC1350$
+
+ ******************************************************************************
+ $License: BSD3 2016 $
+  
+   Copyright (c) 2015, Texas Instruments Incorporated
+   All rights reserved.
+  
+   Redistribution and use in source and binary forms, with or without
+   modification, are permitted provided that the following conditions
+   are met:
+  
+   *  Redistributions of source code must retain the above copyright
+      notice, this list of conditions and the following disclaimer.
+  
+   *  Redistributions in binary form must reproduce the above copyright
+      notice, this list of conditions and the following disclaimer in the
+      documentation and/or other materials provided with the distribution.
+  
+   *  Neither the name of Texas Instruments Incorporated nor the names of
+      its contributors may be used to endorse or promote products derived
+      from this software without specific prior written permission.
+  
+   THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+   AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO,
+   THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR
+   PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR
+   CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL,
+   EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO,
+   PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS;
+   OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY,
+   WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR
+   OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE,
+   EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ ******************************************************************************
+ $Release Name: TI-15.4Stack Linux x64 SDK$
+ $Release Date: July 14, 2016 (2.00.00.30)$
+ *****************************************************************************/
+
+syntax = "proto2";
+
+import "api_mac.proto";
+
+/*!
+ Coordinator State Values
+ */
+enum Cllc_states
+{
+    /*! Powered up, not started and waiting for user to start */
+    Cllc_states_initWaiting = 1;
+    /*! Starting coordinator, scanning and selecting the best parameters */
+    Cllc_states_startingCoordinator = 2;
+    /*!
+     Powered up, found network information, and restoring device in network
+     */
+    Cllc_states_initRestoringCoordinator = 3;
+    /*! Device is operating as coordinator */
+    Cllc_states_started = 4;
+    /*! Device is restored as coordinator in the network */
+    Cllc_states_restored = 5;
+    /*! Joining allowed state has changed to allowed */
+    Cllc_states_joiningAllowed = 6;
+    /*! Joining allowed state has changed to not allowed */
+    Cllc_states_joiningNotAllowed = 7;
+}
+
+
+/*!
+ Coordinator starting State Values
+ */
+enum Cllc_coord_states
+{
+    /*! Initialized state */
+    Cllc_coordStates_initialized = 0;
+    /*! MAC  coordinator is performing a active scan  */
+    Cllc_coordStates_scanActive = 1;
+    /*! active scan  confirm received*/
+    Cllc_coordStates_scanActiveCnf = 2;
+    /*! Eneergy detect scan confirm received */
+    Cllc_coordStates_scanEdCnf = 3;
+    /*! Start confirm received */
+    Cllc_coordStates_startCnf = 4;
+}
+
+/*! Building block for association table */
+message Cllc_associated_devices
+{
+    /*! Short address of associated device */
+    required uint32 shortAddr = 1;;
+    /*! capability information */
+    required ApiMac_capabilityInfo capInfo = 2;
+    /*! RSSI */
+    required sint32 rssi = 3;
+    /*! Device alive status */
+    required uint32 status = 4;
+    /*! CONFIG_REPORTING_INTERVAL */
+    required uint32 reporting = 5;
+    /*! CONFIG_POLLING_INTERVAL */
+    required uint32 polling = 6;
+}
+
+/*! Cllc statistics */
+message Cllc_statistics
+{
+    /*! number of PA Solicit messages received */
+    required  uint32 fhNumPASolicitReceived = 1;
+    /*! number of PA messages sent */
+    required uint32 fhNumPASent = 2;
+    /*! number of PC Solicit messages received */
+    required uint32 fhNumPANConfigSolicitsReceived = 3;
+    /*! number of PC messages sent */
+    required uint32 fhNumPANConfigSent = 4;
+    required uint32 otherStats = 5;
+}
+
+//  ========================================
+//  Texas Instruments Micro Controller Style
+//  ========================================
+//  Local Variables:
+//  mode: protobuf
+//  tab-width: 4
+//  c-basic-offset: 4
+//  indent-tabs-mode: nil
+//  End:
+//  vim:set  tabstop=4 shiftwidth=4 expandtab=true
+

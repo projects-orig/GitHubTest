@@ -1,0 +1,11 @@
+Script started on Thu 16 Feb 2017 03:36:01 PM CST
+make -f Makefile ARCH=host 
+make[1]: Entering directory `/home/jason-lin/eve_A8.cotest/eve_A8/users/TI_SDK/ti154/example/npi_server2'
+mkdir -p objs/host
+Compling: linux_main.c
+Compling: app_main.c
+Creating App: (host) host_npi_server2
+Done.
+make[1]: Leaving directory `/home/jason-lin/eve_A8.cotest/eve_A8/users/TI_SDK/ti154/example/npi_server2'
+
+Script done on Thu 16 Feb 2017 03:36:01 PM CST

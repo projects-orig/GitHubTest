@@ -15,5 +15,5 @@ modprobe snd_usb_audio
 
 ntpdate -b -s -u pool.ntp.org
 dpkg-reconfigure --frontend noninteractive tzdata
-#jj test
+
 exit 0

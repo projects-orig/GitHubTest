@@ -1,0 +1,36 @@
+{
+    "HostSetting":[
+    {
+        "partial_transmission_time_when_enabled":"60",
+        "partial_transmission_time_when_disabled":"60",
+        "urgent_bt_alarm_sound_set":"1",
+        "alarm_action_time_set":"30",
+        "alarm_contact_output_action_time":"30",
+        "alarm_contact_output_action_status":"1",
+        "alarm_contact_output_set":"1",
+        "v_output_contact_action_time":"3",
+        "v_output_contact_action_status":"1",
+        "v_contact_output_set":"1",
+        "network_set":"3",
+        "pppoe_id":"",
+        "pppoe_pass":"",
+        "static_ip":"",
+        "static_mask":"",
+        "static_gate":"",
+        "wifi_ssid":"",
+        "wifi_pass":"",
+        "phone_number":"40661234",
+        "phone_account":"mychat",
+        "phone_password":"mychat",
+        "action_temperature_sensing":"50",
+        "action_temperature_sensing_gap":"5",
+        "connection_mac":"",
+        "battery_low_power_set":"30",
+        "battery_low_power_gap":"5",
+        "nick_name":"",
+        "switch_without_network":"0",
+        "antenna_wifi_type":"1",
+        "antenna_sub1g_type":"1"
+    }
+    ]
+}
